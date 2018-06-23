@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      var map;
+      var infowindow;
+
+      function initMap() {
+        var pyrmont = {lat: 40.771133, lng: -73.974187};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: pyrmont,
+          zoom: 13
+        });
+
+        infowindow = new google.maps.InfoWindow();
+        
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: pyrmont,
+          radius: 5000,
+          type: ['clothing_store']
+        }, callback1);
+
+        var restaurant = new google.maps.places.PlacesService(map);
+        restaurant.nearbySearch({
+          location: pyrmont,
+          radius: 5000,
+          type: ['restaurant']
+        }, callback2);
+
+        var restaurant = new google.maps.places.PlacesService(map);
+        restaurant.nearbySearch({
+          location: pyrmont,
+          radius: 5000,
+          type: ['art_gallery']
+        }, callback3);
+
+        var restaurant = new google.maps.places.PlacesService(map);
+        restaurant.nearbySearch({
+          location: pyrmont,
+          radius: 5000,
+          type: ['hospital']
+        }, callback4);
+
+      }
+      
+
+      function callback1(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker1(results[i]);
+          }
+        }
+      }
+      function createMarker1(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          label: "衣", 
+          map: map,
+          position: place.geometry.location
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+      
+
+      function callback2(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker2(results[i]);
+          }
+        }
+      }
+      function createMarker2(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          label: {text:"食", color:"blue"},
+          map: map,
+          position: place.geometry.location
+        });
+      google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+
+      function callback3(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker3(results[i]);
+          }
+        }
+      }
+      function createMarker3(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          label:"乐",
+          map: map,
+          position: place.geometry.location
+        });
+      google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+    
+      function callback4(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker4(results[i]);
+          }
+        }
+      }
+      function createMarker4(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          label: "康",
+          map: map,
+          position: place.geometry.location
+        });
+      google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+      
+
+//customized markers https://developers.google.com/maps/documentation/javascript/custom-markers
+
+
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YourAPIKey&libraries=places&callback=initMap" async defer></script>
+  </body>
+</html>
