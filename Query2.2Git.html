@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+      var map;
+      var infowindow;
+      var radi =10000;
+      var zom = 12;
+      var industries = ["clothing", "restaurant","entertainment","hospital","transportation","housing","media","finance"];
+      var labels =  "衣食乐康行居信金";//"12345678"; //
+      var labelIndex = 0;
+      console.log(industries);
+
+      function initMap() {
+        var pyrmont = {lat: 35.652832, lng: 139.739478};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: pyrmont,
+          zoom: zom
+        });
+
+        infowindow = new google.maps.InfoWindow();
+        
+        for ( i in industries) {
+          var service = new google.maps.places.PlacesService(map);
+          //console.log(industries[i], "starts textSearch.");
+          service.textSearch({
+            location: pyrmont,
+            radius: radi,
+            query: industries[i]
+          }, eval(("callback"+i.toString())));
+          console.log("callback"+i.toString());
+        }
+      }
+        
+        //8 individual callbacks
+        function callback0(results, status) {
+          labelIndex = 0;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback1(results, status) {
+          labelIndex = 1;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback2(results, status) {
+          labelIndex = 2;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback3(results, status) {
+          labelIndex = 3;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback4(results, status) {
+          labelIndex = 4;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback5(results, status) {
+          labelIndex = 5;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback6(results, status) {
+          labelIndex = 6;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+        function callback7(results, status) {
+          labelIndex = 7;
+          console.log("callback"+labelIndex.toString());
+          callbackCore(results, status, labelIndex);
+        }
+
+        //callbackCore function
+        function callbackCore (results, status, labelIndex){
+          console.log("The search results");
+            console.log(results);
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+              createMarker(results[i], labelIndex);
+            }
+          }
+          console.log("After createMarket, the label index is", labels[labelIndex %labels.length]);
+        }
+
+        //create Markets
+        function createMarker(place, labelIndex) {
+          console.log("createMarker starts for", labels[labelIndex %labels.length]);
+          var placeLoc = place.geometry.location;
+          var contentString = '<div id="content">'+
+        '<div id="siteNotice">'+
+        '</div>'+
+        '<p>'+'<b>'+place.name+'</b>'+'</p>'+
+        '<div id="bodyContent">'+
+        '<p>'+place.formatted_address+'</p>'+
+        //'<p>'+place.type+'</p>'+
+        //'<p>'+ '<image src = '+place.icon+'>'+'</p>'+
+        '</div>'+
+        '</div>';
+          var marker = new google.maps.Marker({
+            //icon: {url:place.icon, size: new google.maps.Size(71,71), 
+            //scaledSize: new google.maps.Size(25.25)},
+            label: labels[labelIndex],
+            map: map,
+            position: place.geometry.location
+          });
+          //console.log(labels[labelIndex],"industry marker label has been used");
+          google.maps.event.addListener(marker, 'mouseover', function() {
+            infowindow.setContent(contentString);
+            infowindow.open(map, this);
+          });
+          google.maps.event.addListener(marker, 'mouseout', function() {
+            infowindow.close(map, this);
+          });
+        }
+
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=APIKey&libraries=places&callback=initMap" async defer></script>
+  </body>
+</html>
